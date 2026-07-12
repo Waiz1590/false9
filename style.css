@@ -287,7 +287,7 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
         padding: 1.2rem;
     }
 
-/* 2. Apple Fluid Navbar Mobile Overrides (LOGO FIXED) */
+/* 2. Apple Fluid Navbar Mobile Overrides (FORCED LOGO FIX) */
     .navbar {
         top: 0.8rem;
         width: 94%;
@@ -303,21 +303,21 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     }
 
     .logo-link {
-        height: auto; /* FIXED: Removes desktop height restriction */
-        width: 140px; /* Gives the logo a bit more prominence */
+        height: auto !important; /* Forces the fixed 40px height to drop */
+        width: 140px !important;
         text-decoration: none;
-        overflow: visible !important; /* FIXED: Prevents the top/bottom clipping */
-        display: flex;
+        overflow: visible !important; /* Breaks the desktop chop restriction */
+        display: flex !important;
         justify-content: center;
         align-items: center;
         margin: 0 auto;
     }
 
     .logo-img {
-        width: 100%;
-        height: auto;
-        display: block;
-        margin: 0; /* Resets any manual shifting constraints */
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        margin-bottom: 0 !important; /* Clears the manual alignment shift */
     }
 
     .nav-links {
@@ -346,7 +346,6 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
         height: 32px;
         background: rgba(255, 255, 255, 0.05);
     }
-
     /* 3. Hero & Section Text Resizing */
     .hero-title {
         font-size: 3.2rem; /* Shrinks the massive "OWN THE TURF" font so it doesn't clip */
