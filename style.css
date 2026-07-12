@@ -266,6 +266,145 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
 .minimal-footer a { color: #aaa; text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s; }
 .minimal-footer a:hover { color: #fff; border-color: #fff; }
 /* ==========================================
+   PREMIUM TOURNAMENTS HUB STYLING
+   ========================================== */
+.tourney-select-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.premium-hub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+.hub-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.4) 0%, rgba(10, 10, 10, 0.5) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 3.5rem 2.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 320px;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Dynamic Hover Effects */
+.hub-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Subtle underlying color accents on hover */
+.live-card:hover {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.4) 0%, rgba(15, 25, 15, 0.3) 100%);
+}
+.archive-card:hover {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.4) 0%, rgba(20, 20, 28, 0.3) 100%);
+}
+
+.hub-card-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+.hub-card:hover .hub-card-glow {
+    background: radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+}
+
+/* Top corner badges */
+.hub-badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 0.4rem 0.9rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-family: 'Syne', sans-serif;
+}
+.live-card .hub-badge {
+    background: rgba(74, 222, 128, 0.1);
+    border-color: rgba(74, 222, 128, 0.3);
+    color: #4ade80;
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.05);
+}
+
+/* Typography elements */
+.hub-card-content h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #fff;
+    margin-bottom: 0.8rem;
+    line-height: 1.1;
+}
+
+.hub-card-content p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+    max-width: 90%;
+}
+
+.hub-action-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    opacity: 0.5;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+.hub-card:hover .hub-action-text {
+    opacity: 1;
+    transform: translateX(6px);
+    display: inline-block;
+}
+
+/* --- RESPONSIVE FIXES FOR THE GRID --- */
+@media (max-width: 768px) {
+    .premium-hub-grid {
+        grid-template-columns: 1fr; /* Stack vertically on small screens */
+        gap: 1.5rem;
+    }
+    .tourney-select-header {
+        margin-bottom: 2rem;
+    }
+    .hub-card {
+        min-height: 250px;
+        padding: 2.5rem 1.5rem;
+    }
+    .hub-card-content h3 {
+        font-size: 1.6rem;
+    }
+    .hub-card-content p {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        max-width: 100%;
+    }
+}
+/* ==========================================
    MOBILE & TABLET RESPONSIVE FIXES
    ========================================== */
 @media (max-width: 768px) {
