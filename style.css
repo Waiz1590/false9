@@ -1,5 +1,3 @@
-
-
 /* --- GLOBALS & VARIABLES --- */
 :root {
     --bg-dark: #050505;
@@ -85,18 +83,18 @@ h1, h2, h3, .action-btn, .huge-glass-btn, .rule-number, .accent-text, .overline 
 /* --- THE LOGO FIX (Cropping the transparent space) --- */
 .logo-link {
     display: flex;
-    align-items: flex-end; /* Pushes the image to the bottom */
-    height: 40px; /* Locks the nav bar height */
-    width: 160px; /* Gives the logo plenty of width to expand */
+    align-items: flex-end; 
+    height: 40px; 
+    width: 160px; 
     text-decoration: none; 
-    overflow: hidden; /* CHOP: This cuts off the giant empty space at the top of the PNG */
+    overflow: hidden; 
     border-radius: 8px;
 }
 
 .logo-img {
-    width: 100%; /* Forces the logo text to be 160px wide */
-    height: auto; /* Maintains proportions */
-    margin-bottom: 2px; /* Pulls the text up just enough so the bottom isn't cut off */
+    width: 100%; 
+    height: auto; 
+    margin-bottom: 2px; 
     display: block;
 }
 
@@ -265,8 +263,9 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
 .minimal-footer p { color: #444; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 500;}
 .minimal-footer a { color: #aaa; text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s; }
 .minimal-footer a:hover { color: #fff; border-color: #fff; }
+
 /* ==========================================
-   PREMIUM TOURNAMENTS HUB STYLING
+   PREMIUM TOURNAMENTS HUB STYLING (DESKTOP)
    ========================================== */
 .tourney-select-header {
     text-align: center;
@@ -297,7 +296,6 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Dynamic Hover Effects */
 .hub-card:hover {
     transform: translateY(-8px);
     border-color: rgba(255, 255, 255, 0.2);
@@ -305,7 +303,6 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Subtle underlying color accents on hover */
 .live-card:hover {
     background: linear-gradient(135deg, rgba(30, 30, 30, 0.4) 0%, rgba(15, 25, 15, 0.3) 100%);
 }
@@ -327,7 +324,6 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     background: radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
 }
 
-/* Top corner badges */
 .hub-badge {
     position: absolute;
     top: 1.5rem;
@@ -349,7 +345,6 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     box-shadow: 0 0 15px rgba(74, 222, 128, 0.05);
 }
 
-/* Typography elements */
 .hub-card-content h3 {
     font-size: 2rem;
     font-weight: 800;
@@ -382,51 +377,29 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     display: inline-block;
 }
 
-/* --- RESPONSIVE FIXES FOR THE GRID --- */
-@media (max-width: 768px) {
-    .premium-hub-grid {
-        grid-template-columns: 1fr; /* Stack vertically on small screens */
-        gap: 1.5rem;
-    }
-    .tourney-select-header {
-        margin-bottom: 2rem;
-    }
-    .hub-card {
-        min-height: 250px;
-        padding: 2.5rem 1.5rem;
-    }
-    .hub-card-content h3 {
-        font-size: 1.6rem;
-    }
-    .hub-card-content p {
-        font-size: 0.9rem;
-        margin-bottom: 1.5rem;
-        max-width: 100%;
-    }
-}
+
 /* ==========================================
    MOBILE & TABLET RESPONSIVE FIXES
    ========================================== */
 @media (max-width: 768px) {
     /* 1. Global Layout resets */
     * {
-        /* Restores normal cursor for touch devices */
         cursor: auto !important; 
     }
     
     .cursor-dot, .cursor-outline {
-        display: none !important; /* Hide custom cursor on mobile touchscreens */
+        display: none !important; 
     }
 
     main {
-        padding-top: 100px; /* Reduces spacing under the sticky nav */
+        padding-top: 100px; 
     }
 
     .content-wrapper {
         padding: 1.2rem;
     }
 
-/* 2. Apple Fluid Navbar Mobile Overrides (FORCED LOGO FIX) */
+    /* 2. Apple Fluid Navbar Mobile Overrides */
     .navbar {
         top: 0.8rem;
         width: 94%;
@@ -442,10 +415,10 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     }
 
     .logo-link {
-        height: auto !important; /* Forces the fixed 40px height to drop */
+        height: auto !important; 
         width: 140px !important;
         text-decoration: none;
-        overflow: visible !important; /* Breaks the desktop chop restriction */
+        overflow: visible !important; 
         display: flex !important;
         justify-content: center;
         align-items: center;
@@ -456,7 +429,7 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
         width: 100% !important;
         height: auto !important;
         display: block !important;
-        margin-bottom: 0 !important; /* Clears the manual alignment shift */
+        margin-bottom: 0 !important; 
     }
 
     .nav-links {
@@ -485,9 +458,54 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
         height: 32px;
         background: rgba(255, 255, 255, 0.05);
     }
+
+    /* --- TOURNAMENTS HUB GRID RESPONSIVE OVERRIDES --- */
+    .premium-hub-grid {
+        grid-template-columns: 1fr; 
+        gap: 1.5rem;
+    }
+    
+    .tourney-select-header {
+        margin-bottom: 2rem;
+    }
+    
+    .hub-card {
+        min-height: auto; 
+        padding: 2.5rem 1.5rem 2rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; 
+        gap: 1.2rem;
+    }
+
+    .hub-badge {
+        position: relative;
+        top: 0;
+        right: 0;
+        align-self: flex-start; 
+        margin-bottom: 0.5rem;
+    }
+
+    .hub-card-content h3 {
+        font-size: 1.6rem !important; 
+        line-height: 1.2;
+        letter-spacing: -0.5px;
+        word-wrap: break-word;
+        word-break: break-word; 
+        white-space: normal; 
+    }
+
+    .hub-card-content p {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+        max-width: 100%;
+        line-height: 1.4;
+    }
+
     /* 3. Hero & Section Text Resizing */
     .hero-title {
-        font-size: 3.2rem; /* Shrinks the massive "OWN THE TURF" font so it doesn't clip */
+        font-size: 3.2rem; 
         letter-spacing: -1px;
     }
 
@@ -508,7 +526,7 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     }
 
     .timer-text {
-        font-size: 1.8rem; /* Shrinks countdown numbers to fit beautifully on one line */
+        font-size: 1.8rem; 
     }
 
     .huge-glass-btn {
