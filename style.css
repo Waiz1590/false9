@@ -287,7 +287,7 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
         padding: 1.2rem;
     }
 
-  /* 2. Apple Fluid Navbar Mobile Overrides (FIXED) */
+/* 2. Apple Fluid Navbar Mobile Overrides (LOGO FIXED) */
     .navbar {
         top: 0.8rem;
         width: 94%;
@@ -303,8 +303,11 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     }
 
     .logo-link {
-        height: 32px;
-        width: 120px;
+        height: auto; /* FIXED: Removes desktop height restriction */
+        width: 140px; /* Gives the logo a bit more prominence */
+        text-decoration: none;
+        overflow: visible !important; /* FIXED: Prevents the top/bottom clipping */
+        display: flex;
         justify-content: center;
         align-items: center;
         margin: 0 auto;
@@ -313,6 +316,8 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
     .logo-img {
         width: 100%;
         height: auto;
+        display: block;
+        margin: 0; /* Resets any manual shifting constraints */
     }
 
     .nav-links {
@@ -329,8 +334,8 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
         font-size: 0.7rem;
         padding: 0.5rem 0.6rem;
         text-align: center;
-        flex: 1; /* Distributes room equally so text never squishes */
-        white-space: nowrap; /* Prevents awkward text breaking */
+        flex: 1; 
+        white-space: nowrap; 
     }
 
     .admin-trigger {
