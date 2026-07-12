@@ -265,3 +265,146 @@ main { padding-top: 140px; min-height: 100vh; display: flex; flex-direction: col
 .minimal-footer p { color: #444; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 500;}
 .minimal-footer a { color: #aaa; text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s; }
 .minimal-footer a:hover { color: #fff; border-color: #fff; }
+/* ==========================================
+   MOBILE & TABLET RESPONSIVE FIXES
+   ========================================== */
+@media (max-width: 768px) {
+    /* 1. Global Layout resets */
+    * {
+        /* Restores normal cursor for touch devices */
+        cursor: auto !important; 
+    }
+    
+    .cursor-dot, .cursor-outline {
+        display: none !important; /* Hide custom cursor on mobile touchscreens */
+    }
+
+    main {
+        padding-top: 100px; /* Reduces spacing under the sticky nav */
+    }
+
+    .content-wrapper {
+        padding: 1.2rem;
+    }
+
+    /* 2. Apple Fluid Navbar Mobile Overrides */
+    .navbar {
+        top: 0.8rem;
+        width: 92%;
+        padding: 0.5rem 1rem;
+        border-radius: 30px; /* Slightly tighter curves on mobile */
+    }
+
+    .nav-container {
+        flex-direction: column; /* Stack logo above links if it gets too cramped */
+        gap: 0.8rem;
+        align-items: center;
+    }
+
+    .logo-link {
+        height: 32px;
+        width: 130px;
+        justify-content: center;
+    }
+
+    .nav-links {
+        gap: 0.2rem;
+        padding: 0.2rem;
+        width: 100%;
+        justify-content: center;
+        overflow-x: auto; /* Allows links to scroll sideways smoothly if screens are tiny */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-links a {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.8rem;
+    }
+
+    .admin-trigger {
+        position: absolute;
+        right: 1rem;
+        top: 0.5rem;
+        width: 32px;
+        height: 32px;
+    }
+
+    /* 3. Hero & Section Text Resizing */
+    .hero-title {
+        font-size: 3.2rem; /* Shrinks the massive "OWN THE TURF" font so it doesn't clip */
+        letter-spacing: -1px;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        text-align: center;
+    }
+
+    /* 4. Panels & Timers */
+    .glass-panel {
+        padding: 1.5rem 1rem;
+        border-radius: 16px;
+    }
+
+    .timer-text {
+        font-size: 1.8rem; /* Shrinks countdown numbers to fit beautifully on one line */
+    }
+
+    .huge-glass-btn {
+        font-size: 1.1rem;
+        padding: 1.5rem;
+    }
+
+    /* 5. Bento Cards & Rule Rows adjustments */
+    .bento-card {
+        padding: 1.5rem;
+        border-radius: 16px;
+    }
+
+    .bento-card h3 {
+        font-size: 1.6rem;
+    }
+
+    .bento-card p {
+        font-size: 0.95rem;
+    }
+
+    .rule-row {
+        gap: 1rem;
+        padding: 1.5rem 1rem;
+    }
+
+    .rule-number {
+        font-size: 2.5rem;
+    }
+
+    /* 6. Modals & Popups Fixes */
+    .modal-box {
+        width: 95%;
+        padding: 2rem 1rem;
+        border-radius: 20px;
+    }
+
+    .reg-code {
+        font-size: 2rem;
+    }
+}
+
+/* Extra tight fix for very narrow screens (e.g., iPhone SE) */
+@media (max-width: 380px) {
+    .hero-title {
+        font-size: 2.6rem;
+    }
+    .timer-text {
+        font-size: 1.4rem;
+    }
+    .nav-links a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+    }
+}
