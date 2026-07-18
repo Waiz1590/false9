@@ -4,20 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>False9ine | Premium 5-a-Side Tournaments</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- INTERACTIVE CURSOR MOTIONS -->
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-outline" id="cursor-outline"></div>
-    <div class="bg-glow"></div>
+    
+    <!-- KINETIC BG GLOW LAYER -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
 
+    <!-- MAIN IMMERSIVE NAVIGATION CONTAINER -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo-link" onclick="navigate('home')">
-                <img src="logo-white.png" alt="FALSE9INE" class="logo-img">
+                <img src="logo-white.png" alt="FALSE9INE" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <span class="logo-text" style="display:none;">FALSE<span>9</span>INE</span>
             </a>
             <ul class="nav-links">
+                <div class="nav-indicator" id="nav-indicator"></div>
                 <li><a href="#" onclick="navigate('home')" class="nav-item active" data-target="home">Home</a></li>
                 <li><a href="#" onclick="navigate('tournaments')" class="nav-item" data-target="tournaments">Tournaments</a></li>
                 <li><a href="#" onclick="navigate('gallery')" class="nav-item" data-target="gallery">Gallery</a></li>
@@ -25,130 +35,401 @@
                 <li><a href="#" onclick="navigate('rulebook')" class="nav-item" data-target="rulebook">Rules</a></li>
             </ul>
             <button class="admin-trigger" onclick="openModal('admin-modal')" aria-label="Admin Login">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
             </button>
         </div>
     </nav>
 
-    <main id="app-content">
+    <!-- MAIN APP ROUTER -->
+    <main class="main-content" id="app-content">
+        
+        <!-- SECTION: HOME -->
         <section id="home" class="view-section active-view">
-            <div class="hero-content fade-in-up">
-                <h1 class="hero-title">OWN THE TURF</h1>
-                <p class="hero-subtitle">Local Football, Done Right.</p>
+            <div class="hero-content">
+                <span class="overline">WELCOME TO THE CLINIC</span>
+                <h1 class="hero-title">OWN THE<br>TURF</h1>
+                <p class="hero-subtitle">Chennai's 5-a-side football tournaments — real turf, real stakes, no dead air.</p>
+                
                 <div class="glass-panel countdown-container">
                     <p class="overline">REGISTRATIONS CLOSE IN</p>
                     <div id="countdown-timer" class="timer-text">
-                        <span id="days">00</span>d : <span id="hours">00</span>h : <span id="minutes">00</span>m : <span id="seconds">00</span>s
+                        <span id="days">33</span>d : <span id="hours">00</span>h : <span id="minutes">14</span>m : <span id="seconds">36</span>s
                     </div>
+                </div>
+
+                <div class="stats-strip" id="stats-strip">
+                    <!-- Cards injection point via JavaScript -->
                 </div>
             </div>
         </section>
 
-        <!-- PREMIUM TOURNAMENTS HUB SELECTION -->
+        <!-- SECTION: PREMIUM TOURNAMENTS HUB SELECTION -->
         <section id="tournaments" class="view-section">
-            <div class="content-wrapper fade-in-up" style="max-width: 1000px; width: 100%;">
+            <div class="content-wrapper">
                 <div class="tourney-select-header">
                     <span class="overline">CHOOSE STAGE</span>
                     <h2 class="section-title">COMPETE OR REMINISCE</h2>
                 </div>
-                
+
+                <div class="how-it-works">
+                    <span class="overline" style="text-align:center; display:block;">HOW IT WORKS</span>
+                    <h3 class="hiw-title">Four steps to kickoff</h3>
+                    <div class="hiw-grid">
+                        <div class="hiw-step">
+                            <div class="hiw-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+                            </div>
+                            <div class="hiw-num">01</div>
+                            <h4>Pick a Hub</h4>
+                            <p>Browse live tournaments or scroll the archive for what you missed.</p>
+                        </div>
+                        <div class="hiw-step">
+                            <div class="hiw-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="12" y2="16"></line></svg>
+                            </div>
+                            <div class="hiw-num">02</div>
+                            <h4>Register Your Squad</h4>
+                            <p>Team name, captain, phone number. Takes about thirty seconds.</p>
+                        </div>
+                        <div class="hiw-step">
+                            <div class="hiw-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7"></rect><rect x="14" y="4" width="7" height="7"></rect><rect x="3" y="15" width="7" height="7"></rect><line x1="14" y1="15" x2="21" y2="15"></line><line x1="14" y1="19" x2="21" y2="19"></line></svg>
+                            </div>
+                            <div class="hiw-num">03</div>
+                            <h4>Pay & Confirm</h4>
+                            <p>Scan the code, pay via UPI, get your match pass instantly.</p>
+                        </div>
+                        <div class="hiw-step">
+                            <div class="hiw-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 3 v3 M12 18 v3 M3 12 h3 M18 12 h3"></path><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"></circle></svg>
+                            </div>
+                            <div class="hiw-num">04</div>
+                            <h4>Show Up & Ball Out</h4>
+                            <p>Report 30 minutes early, lace up, go compete.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="premium-hub-grid">
                     <!-- CARD 1: UPCOMING -->
-                    <div class="hub-card live-card" onclick="navigate('upcoming')">
-                        <div class="hub-card-glow"></div>
+                    <div class="hub-card live-card tilt-card" onclick="navigate('upcoming')">
                         <div class="hub-badge">REGISTRATIONS OPEN</div>
                         <div class="hub-card-content">
                             <h3>UPCOMING HUB</h3>
                             <p>Secure your squad's slot, check turf locations, view registration fees, and claim the ultimate crown.</p>
-                            <span class="hub-action-text">ENTER HUBS ➔</span>
+                            <span class="hub-action-text">ENTER HUBS</span>
                         </div>
                     </div>
 
                     <!-- CARD 2: PAST -->
-                    <div class="hub-card archive-card" onclick="navigate('gallery')">
-                        <div class="hub-card-glow"></div>
-                        <div class="hub-badge muted-badge">THE ARCHIVE</div>
+                    <div class="hub-card archive-card tilt-card" onclick="navigate('gallery')">
+                        <div class="hub-badge">THE ARCHIVE</div>
                         <div class="hub-card-content">
                             <h3>PAST EVENTS</h3>
                             <p>Relive the highlights, browse match photography, view historic champions, and see what you missed.</p>
-                            <span class="hub-action-text">VIEW MEDIA ➔</span>
+                            <span class="hub-action-text">VIEW MEDIA</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- RESTORED: This section holds your dynamic JavaScript fixtures grid -->
+        <!-- SECTION: UPCOMING FIXTURES -->
         <section id="upcoming" class="view-section">
-            <div class="content-wrapper fade-in-up">
+            <div class="content-wrapper">
                 <h2 class="section-title">UPCOMING FIXTURES</h2>
-                <div id="upcoming-grid" class="tournament-grid"></div>
-            </div>
-        </section>
-
-        <section id="gallery" class="view-section">
-            <div class="content-wrapper fade-in-up">
-                <h2 class="section-title">THE ARCHIVE</h2>
-                <div class="gallery-masonry"><div class="glass-panel empty-state">Gallery content will be synced from admin dashboard.</div></div>
-            </div>
-        </section>
-
-        <section id="about" class="view-section">
-            <div class="content-wrapper fade-in-up" style="max-width: 1000px;">
-                <h2 class="section-title" style="text-align: center; margin-bottom: 1rem;">THE FALSE9INE STORY</h2>
-                <p class="intro-text" style="text-align: center; margin-bottom: 3rem;">From casual kickabouts to Chennai's premier football community.</p>
-                <div class="about-bento-grid">
-                    <div class="bento-card origin-card"><div class="bento-glow"></div><div class="bento-content"><span class="accent-text">01 // THE ORIGIN</span><h3>Started by players, for players.</h3><p>False9ine started with two friends, Faaiz and Waiz, who simply shared a love for football and believed local players deserved better.</p></div></div>
-                    <div class="bento-card half-card"><div class="bento-glow"></div><div class="bento-content"><span class="accent-text">02 // THE MISSION</span><h3>More than tournament organizers.</h3><p>We obsess over the details, from the quality of our events to the content we create.</p></div></div>
-                    <div class="bento-card half-card"><div class="bento-glow"></div><div class="bento-content"><span class="accent-text">03 // THE CULTURE</span><h3>Building the community.</h3><p>Our vision is to build a community where local talent is celebrated, friendships are formed.</p></div></div>
+                <div id="upcoming-grid" class="tournament-grid">
+                    <!-- Cards injection point via JavaScript -->
                 </div>
             </div>
         </section>
 
+        <!-- SECTION: GALLERY / ARCHIVE -->
+        <section id="gallery" class="view-section">
+            <div class="content-wrapper">
+                <h2 class="section-title">THE ARCHIVE</h2>
+                <div class="gallery-masonry">
+                    <div class="glass-panel empty-state">
+                        <p style="color: var(--text-muted);">Gallery content will be synced live from admin dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ABOUT STORY -->
+        <section id="about" class="view-section">
+            <div class="content-wrapper">
+                <h2 class="section-title" style="text-align: center; margin-bottom: 0.5rem;">THE FALSE9INE STORY</h2>
+                <p class="intro-text" style="text-align: center; margin-bottom: 3.5rem;">From casual kickabouts to Chennai's premier football community.</p>
+                
+                <div class="founder-grid">
+                    <div class="founder-card">
+                        <div class="founder-avatar" style="--avatar-glow: var(--turf);">
+                            <span>F</span>
+                        </div>
+                        <span class="accent-text">CO-FOUNDER</span>
+                        <h3>Faaiz</h3>
+                        <p>Started kicking a ball around with a mate before False9ine had a name — now obsessed with making every matchday feel like the real thing.</p>
+                    </div>
+                    <div class="founder-card">
+                        <div class="founder-avatar" style="--avatar-glow: var(--floodlight);">
+                            <span>W</span>
+                        </div>
+                        <span class="accent-text">CO-FOUNDER</span>
+                        <h3>Waiz</h3>
+                        <p>Believes Chennai's local players deserved a better tier of competition — turf, format, and production value included.</p>
+                    </div>
+                </div>
+
+                <div class="about-bento-grid">
+                    <div class="bento-card half-card">
+                        <div class="bento-content">
+                            <span class="accent-text">01 // THE MISSION</span>
+                            <h3>More than organizers.</h3>
+                            <p>We obsess over the real tournament match feel—from pristine turf curation down to production design value.</p>
+                        </div>
+                    </div>
+                    <div class="bento-card half-card">
+                        <div class="bento-content">
+                            <span class="accent-text">02 // THE CULTURE</span>
+                            <h3>Building the community.</h3>
+                            <p>Our goal is to architect a reliable community arena where organic local football talent is found and celebrated.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: RULEBOOK -->
         <section id="rulebook" class="view-section">
-            <div class="content-wrapper fade-in-up" style="max-width: 1000px;">
-                <div class="rulebook-header">
+            <div class="content-wrapper">
+                <div class="rulebook-header" style="text-align: center; margin-bottom: 4rem;">
                     <h2 class="section-title">OFFICIAL RULEBOOK</h2>
-                    <p class="overline">Version 1.0 // Read carefully</p>
+                    <p class="overline">Version 1.0 // The essentials — read before you register</p>
                 </div>
                 <div class="rule-list">
-                    <div class="rule-row"><div class="rule-number">01</div><div class="rule-details"><h3>Tournament Format</h3><p>Formats may vary (Knockout, League + Knockout, Round Robin, Group Stage + Knockout).</p></div></div>
-                    <div class="rule-row"><div class="rule-number">02</div><div class="rule-details"><h3>Team Composition</h3><p><strong>5-a-side:</strong> 5 players on field. Max squad size: 8.</p></div></div>
-                    <div class="rule-row"><div class="rule-number">03</div><div class="rule-details"><h3>Reporting Time</h3><p>All teams must report <strong>30 minutes</strong> before match.</p></div></div>
+                    <div class="rule-row">
+                        <div class="rule-number">01</div>
+                        <div class="rule-details">
+                            <h3>Tournament Format</h3>
+                            <p>Format depends on the number of registered teams — Knockout, League + Knockout, Round Robin, or Group Stage + Knockout. Always announced before registrations open.</p>
+                        </div>
+                    </div>
+                    <div class="rule-row">
+                        <div class="rule-number">02</div>
+                        <div class="rule-details">
+                            <h3>Team Composition</h3>
+                            <p><strong>5-a-side:</strong> 5 on field, squad of up to 8, minimum 4 to start. <strong>7-a-side:</strong> 7 on field, squad of up to 10, minimum 5 to start. A player can only represent one team per tournament.</p>
+                        </div>
+                    </div>
+                    <div class="rule-row">
+                        <div class="rule-number">03</div>
+                        <div class="rule-details">
+                            <h3>Reporting Time</h3>
+                            <p>All teams must report <strong>30 minutes</strong> before their first match unless stated otherwise. Late arrivals risk a walkover.</p>
+                        </div>
+                    </div>
+                    <div class="rule-row">
+                        <div class="rule-number">04</div>
+                        <div class="rule-details">
+                            <h3>Substitutions</h3>
+                            <p>Rolling substitutions are allowed throughout the match. Players may only enter or leave the field when the referee permits or play has stopped.</p>
+                        </div>
+                    </div>
+                    <div class="rule-row">
+                        <div class="rule-number">05</div>
+                        <div class="rule-details">
+                            <h3>Sliding Tackles</h3>
+                            <p><strong>5-a-side:</strong> not permitted (goalkeepers exempt inside their own area). <strong>7-a-side:</strong> depends on surface and will be announced beforehand. Dangerous or reckless tackles are always penalised.</p>
+                        </div>
+                    </div>
+                    <div class="rule-row">
+                        <div class="rule-number">06</div>
+                        <div class="rule-details">
+                            <h3>Player Conduct</h3>
+                            <p>No yellow or red cards — False9ine runs a <strong>3-warning system</strong>. Three warnings in a match and you're removed from it. Serious misconduct can mean immediate removal from the tournament, no warning needed.</p>
+                        </div>
+                    </div>
+                    <div class="rule-row">
+                        <div class="rule-number">07</div>
+                        <div class="rule-details">
+                            <h3>Walkovers</h3>
+                            <p>A team forfeits if they fail to report on time, don't have the minimum players, or refuse to continue. Referee and organisers decide the result.</p>
+                        </div>
+                    </div>
+                    <div class="rule-row">
+                        <div class="rule-number">08</div>
+                        <div class="rule-details">
+                            <h3>Weather & Delays</h3>
+                            <p>Matches may be delayed, suspended, or rescheduled for heavy rain or unsafe conditions. Any changes will be communicated as early as possible.</p>
+                        </div>
+                    </div>
+                    <div class="rule-row">
+                        <div class="rule-number">09</div>
+                        <div class="rule-details">
+                            <h3>Refunds & Liability</h3>
+                            <p>Registration fees are generally non-refundable once confirmed, except if False9ine cancels the tournament. All participants play at their own risk.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-block">
+                    <span class="overline" style="text-align:center; display:block;">STILL WONDERING</span>
+                    <h3 class="hiw-title">Frequently Asked</h3>
+                    <div class="faq-list" id="faq-list">
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">
+                                <span>What if my squad is short a player or two?</span>
+                                <span class="faq-arrow">▾</span>
+                            </button>
+                            <div class="faq-answer"><p>5-a-side needs a minimum of 4 to start, 7-a-side needs 5. Rolling subs mean you don't need a full bench, just enough to field a legal team.</p></div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">
+                                <span>Can I join without a full team?</span>
+                                <span class="faq-arrow">▾</span>
+                            </button>
+                            <div class="faq-answer"><p>There's no solo sign-up flow yet — DM us on Instagram and we'll see if a squad's short on numbers.</p></div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">
+                                <span>How do we pay the entry fee?</span>
+                                <span class="faq-arrow">▾</span>
+                            </button>
+                            <div class="faq-answer"><p>UPI or GPay, scanned right in the registration flow. You'll get your match code the moment it's confirmed.</p></div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">
+                                <span>What happens if it rains?</span>
+                                <span class="faq-arrow">▾</span>
+                            </button>
+                            <div class="faq-answer"><p>Matches may be delayed, suspended, or rescheduled for unsafe conditions. We'll notify registered teams as early as possible.</p></div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">
+                                <span>Do you provide jerseys or bibs?</span>
+                                <span class="faq-arrow">▾</span>
+                            </button>
+                            <div class="faq-answer"><p>Matching jerseys are encouraged for your own squad — we'll provide bibs where needed to tell teams apart.</p></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- COMPONENT: FOOTER -->
         <footer class="minimal-footer">
-            <p>Wanna join the squad? DM <a href="https://instagram.com/false9ine.duo" target="_blank">@false9ine.duo</a></p>
+            <p>Wanna join the squad? DM <a href="https://instagram.com/false9ine.duo" target="_blank" class="hover-target">@false9ine.duo</a></p>
         </footer>
     </main>
 
-    <div id="admin-modal" class="modal-overlay">
-        <div class="glass-panel modal-box"><button class="close-btn" onclick="closeModal('admin-modal')">✕</button>
-            <h2 class="section-title" style="font-size: 2rem;">Admin Login</h2>
-            <form class="genz-form" onsubmit="event.preventDefault();"><input type="text" placeholder="ID" required><input type="password" placeholder="Pass" required><button type="submit" class="action-btn">Access</button></form>
+    <!-- OVERLAY MODAL: ADMIN LOGIN -->
+    <div id="admin-modal" class="modal-overlay" onclick="handleOutsideClick(event, 'admin-modal')">
+        <div class="glass-panel modal-box">
+            <button class="close-btn" onclick="closeModal('admin-modal')">✕</button>
+            <h2 class="section-title" style="font-size: 2rem; margin-bottom: 1.5rem;">Admin Login</h2>
+            <form class="genz-form" onsubmit="event.preventDefault();">
+                <input type="text" placeholder="ID" required>
+                <input type="password" placeholder="Pass" required>
+                <button type="submit" class="action-btn">Access</button>
+            </form>
         </div>
     </div>
 
-    <div id="register-modal" class="modal-overlay">
+    <!-- OVERLAY MODAL: SIGN UP / REGISTRATION -->
+    <div id="register-modal" class="modal-overlay" onclick="handleOutsideClick(event, 'register-modal')">
         <div class="glass-panel modal-box reg-box">
             <button class="close-btn" onclick="closeModal('register-modal')">✕</button>
+            
             <div id="reg-step-1" class="reg-step active-step">
-                <h2 class="section-title">REGISTER</h2>
-                <div id="reg-tournament-details"></div>
-                <form class="genz-form">
+                <h2 class="section-title" style="font-size: 2.2rem; margin-bottom: 0.5rem;">REGISTER</h2>
+                <div id="reg-tournament-details" style="margin-bottom: 1.5rem; color: var(--accent-green); font-weight: 700;"></div>
+                <form class="genz-form" onsubmit="event.preventDefault();">
                     <input type="text" id="teamName" placeholder="Team Name" required>
                     <input type="text" id="captainName" placeholder="Captain's Name" required>
-                    <input type="tel" id="captainPhone" placeholder="Phone" required>
-                    <button type="button" class="action-btn" onclick="nextRegStep(2)">Pay</button>
+                    <input type="tel" id="captainPhone" placeholder="Phone Number" required>
+                    <button type="button" class="action-btn" onclick="nextRegStep(2)">Proceed to Payment</button>
                 </form>
             </div>
-            <div id="reg-step-2" class="reg-step hidden"><h2 class="section-title">PAYMENT</h2><div class="qr-placeholder"><span>GPay QR CODE</span></div><button type="button" class="action-btn" onclick="nextRegStep(3)">Submit</button></div>
-            <div id="reg-step-3" class="reg-step hidden text-center"><h2 class="section-title" style="color: #4ade80;">YOU'RE IN</h2><div class="reg-code" id="generated-code">F9T----</div></div>
+            
+            <div id="reg-step-2" class="reg-step hidden">
+                <h2 class="section-title" style="font-size: 2.2rem; margin-bottom: 1rem;">PAYMENT</h2>
+                <div class="qr-placeholder">
+                    <span>GPAY OR UPI QR CODE</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 1.5rem;">Upload snapshot validation or pay directly via app.</p>
+                <button type="button" class="action-btn" onclick="nextRegStep(3)">Submit Entry</button>
+            </div>
+            
+            <div id="reg-step-3" class="reg-step hidden" style="text-align: center;">
+                <h2 class="section-title" style="color: var(--accent-green); font-size: 2.5rem; margin-bottom: 1rem;">YOU'RE IN</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Save your match generation pass code below:</p>
+                <div class="reg-code" id="generated-code">F9T-9372</div>
+            </div>
         </div>
     </div>
     
+    <!-- FLOATING EASTER EGG: PENALTY SHOOTOUT -->
+    <button class="fab-game" onclick="openGameModal()" aria-label="Play a penalty shootout">
+        <span class="fab-emoji">⚽</span>
+        <span class="fab-label">Take a Penalty</span>
+    </button>
+
+    <div id="game-modal" class="modal-overlay" onclick="handleOutsideClick(event, 'game-modal')">
+        <div class="glass-panel modal-box game-box">
+            <button class="close-btn" onclick="closeModal('game-modal')">✕</button>
+            <h2 class="section-title" style="font-size: 1.9rem; margin-bottom: 0.3rem;">PENALTY SHOOTOUT</h2>
+            <p class="game-sub" id="game-sub">Pick your corner. Beat the keeper.</p>
+
+            <div class="pitch-goal">
+                <svg viewBox="0 0 300 170" class="goal-svg">
+                    <rect x="20" y="20" width="260" height="130" fill="none" stroke="var(--chalk)" stroke-width="4"></rect>
+                    <line x1="20" y1="20" x2="0" y2="0" stroke="var(--chalk)" stroke-width="2" opacity="0.5"></line>
+                    <line x1="280" y1="20" x2="300" y2="0" stroke="var(--chalk)" stroke-width="2" opacity="0.5"></line>
+                    <line x1="20" y1="150" x2="0" y2="0" stroke="var(--chalk)" stroke-width="0" opacity="0"></line>
+                    <g stroke="rgba(245,243,234,0.18)" stroke-width="1">
+                        <line x1="55" y1="20" x2="55" y2="150"></line>
+                        <line x1="90" y1="20" x2="90" y2="150"></line>
+                        <line x1="125" y1="20" x2="125" y2="150"></line>
+                        <line x1="160" y1="20" x2="160" y2="150"></line>
+                        <line x1="195" y1="20" x2="195" y2="150"></line>
+                        <line x1="230" y1="20" x2="230" y2="150"></line>
+                        <line x1="20" y1="55" x2="280" y2="55"></line>
+                        <line x1="20" y1="90" x2="280" y2="90"></line>
+                        <line x1="20" y1="120" x2="280" y2="120"></line>
+                    </g>
+                    <g id="keeper-icon" transform="translate(150,85)">
+                        <circle cx="0" cy="-14" r="9" fill="var(--floodlight)"></circle>
+                        <rect x="-14" y="-4" width="28" height="26" rx="6" fill="var(--floodlight)"></rect>
+                    </g>
+                </svg>
+                <div class="goal-ball" id="goal-ball"></div>
+                <div class="goal-zones">
+                    <button class="goal-zone" data-zone="tl" onclick="shoot('tl')"></button>
+                    <button class="goal-zone" data-zone="tc" onclick="shoot('tc')"></button>
+                    <button class="goal-zone" data-zone="tr" onclick="shoot('tr')"></button>
+                    <button class="goal-zone" data-zone="bl" onclick="shoot('bl')"></button>
+                    <button class="goal-zone" data-zone="bc" onclick="shoot('bc')"></button>
+                    <button class="goal-zone" data-zone="br" onclick="shoot('br')"></button>
+                </div>
+            </div>
+
+            <div class="game-meta">
+                <span>Shot <strong id="shot-count">1</strong> / 5</span>
+                <span>Score: <strong id="score-count">0</strong></span>
+            </div>
+
+            <div id="game-result" class="game-result hidden">
+                <h3 id="game-result-title"></h3>
+                <p id="game-result-text"></p>
+                <button class="action-btn" onclick="resetGame()">Retake Shootout</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

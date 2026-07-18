@@ -1,170 +1,477 @@
-// ==========================================
-// 1. CUSTOM CURSOR LOGIC
-// ==========================================
-const cursorDot = document.getElementById('cursor-dot');
-const cursorOutline = document.getElementById('cursor-outline');
+/* ==========================================================================
+   FALSE9INE DIGITAL CORE ENGINE - SPA INTERACTION AND ROUTING ARCHITECTURE
+   ========================================================================== */
 
-let mouseX = 0, mouseY = 0;
-let outlineX = 0, outlineY = 0;
+// --- 1. STATE MANAGEMENT & DATA STORAGE ---
+// Add a tournament object here when one is confirmed — the grid renders
+// automatically. Leave empty and the "next drop" state below shows instead.
+const upcomingTournaments = [];
 
-window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    
-    cursorDot.style.left = `${mouseX}px`;
-    cursorDot.style.top = `${mouseY}px`;
+// Target timestamp for registration closing event
+const targetDate = new Date('August 15, 2026 23:59:59').getTime();
+
+// --- 2. CORE INITIALIZATION ENGINE ---
+document.addEventListener("DOMContentLoaded", () => {
+    initCursor();
+    initCountdown();
+    renderTournaments();
+    renderStats();
+    refreshCursorTargets();
+    initTilt();
+    initRipple();
+    moveNavIndicator();
+    const home = document.getElementById('home');
+    if (home) staggerReveal(home);
+    setTimeout(animateStats, 250);
 });
 
-function animateCursor() {
-    outlineX += (mouseX - outlineX) * 0.15;
-    outlineY += (mouseY - outlineY) * 0.15;
-    
-    cursorOutline.style.left = `${outlineX}px`;
-    cursorOutline.style.top = `${outlineY}px`;
-    
-    requestAnimationFrame(animateCursor);
-}
-animateCursor();
+window.addEventListener('resize', moveNavIndicator);
 
-const hoverElements = document.querySelectorAll('a, button, .tourney-card, .rule-row, .bento-card, .file-upload');
-hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-});
-
-// ==========================================
-// 2. SPA ROUTING
-// ==========================================
+// --- 3. DYNAMIC SINGLE PAGE NAVIGATION (SPA) ---
 function navigate(targetId) {
+    // Top out scroll bar positions instantly for visual continuity
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Enforce safety sweep by purging any floating modal layer triggers
+    document.querySelectorAll('.modal-overlay').forEach(modal => modal.classList.remove('active'));
+
+    // Swap layout visibility states via classes
     const sections = document.querySelectorAll('.view-section');
     sections.forEach(sec => sec.classList.remove('active-view'));
     
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+        targetSection.classList.add('active-view');
+    }
+    
+    // Manage dynamic highlighting states on header menus
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => item.classList.remove('active'));
     
-    document.getElementById(targetId).classList.add('active-view');
     const activeLink = document.querySelector(`.nav-item[data-target="${targetId}"]`);
-    if(activeLink) activeLink.classList.add('active');
-    
-    window.scrollTo(0, 0);
+    if (activeLink) {
+        activeLink.classList.add('active');
+    }
+    moveNavIndicator();
+
+    if (targetSection) staggerReveal(targetSection);
+    // Freshly injected cards (e.g. tournament tickets) need their own tilt binding
+    initTilt();
 }
 
-// ==========================================
-// 3. MODAL LOGIC
-// ==========================================
+// Punch cards in one-by-one when a section opens, instead of all at once
+function staggerReveal(section) {
+    const items = section.querySelectorAll('.hub-card, .tourney-card, .bento-card, .rule-row, .hiw-step, .founder-card, .faq-item, .stat-cell');
+    items.forEach((el, i) => {
+        el.classList.remove('revealed');
+        el.style.transitionDelay = `${i * 70}ms`;
+        // Force reflow so the animation restarts on repeat visits
+        void el.offsetWidth;
+        el.classList.add('reveal');
+        requestAnimationFrame(() => el.classList.add('revealed'));
+    });
+}
+
+// --- 4. HIGH-FIDELITY MAGNETIC CUSTOM CURSOR ---
+let mouseX = 0, mouseY = 0;
+let outlineX = 0, outlineY = 0;
+
+function initCursor() {
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorOutline = document.getElementById('cursor-outline');
+    
+    if (!cursorDot || !cursorOutline) return;
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Exact hardware positioning for primary point tracker
+        cursorDot.style.left = `${mouseX}px`;
+        cursorDot.style.top = `${mouseY}px`;
+    });
+
+    function animateCursor() {
+        // Linear Interpolation (LERP) physics calculations for custom easing lag
+        outlineX += (mouseX - outlineX) * 0.15;
+        outlineY += (mouseY - outlineY) * 0.15;
+        
+        cursorOutline.style.left = `${outlineX}px`;
+        cursorOutline.style.top = `${outlineY}px`;
+        
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+}
+
+// Track mouse positioning states over critical interactives
+function refreshCursorTargets() {
+    const targets = document.querySelectorAll('a, button, .tourney-card, .hub-card, .rule-row, .bento-card, .founder-card, .hiw-step, .faq-question, .goal-zone, .fab-game, input');
+    targets.forEach(el => {
+        // Avoid dual assignment listeners duplicate stacks
+        el.removeEventListener('mouseenter', addHoverClass);
+        el.removeEventListener('mouseleave', removeHoverClass);
+        
+        el.addEventListener('mouseenter', addHoverClass);
+        el.addEventListener('mouseleave', removeHoverClass);
+    });
+}
+
+function addHoverClass() { document.body.classList.add('cursor-hover'); }
+function removeHoverClass() { document.body.classList.remove('cursor-hover'); }
+
+// --- 5. OVERLAY MODAL MANAGER SUBSYSTEM ---
 function openModal(modalId) {
-    document.getElementById(modalId).classList.add('active');
+    const modal = document.getElementById(modalId);
+    if (modal) modal.classList.add('active');
 }
 
 function closeModal(modalId) {
-    document.getElementById(modalId).classList.remove('active');
-    if(modalId === 'register-modal') {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    
+    modal.classList.remove('active');
+    if (modalId === 'register-modal') {
+        // Graceful reset timing allows fading structural closures to finish tracking smoothly
         setTimeout(() => nextRegStep(1), 300); 
     }
 }
 
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', (e) => {
-        if(e.target === overlay) closeModal(overlay.id);
-    });
-});
+// Closes a modal when the darkened backdrop itself (not its content) is clicked
+function handleOutsideClick(event, modalId) {
+    if (event.target.id === modalId) closeModal(modalId);
+}
 
-// ==========================================
-// 4. COUNTDOWN TIMER
-// ==========================================
-const targetDate = new Date('August 15, 2026 23:59:59').getTime();
+// --- 6. REAL-TIME MATH COUNTDOWN MODULE ---
+function initCountdown() {
+    const timerInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
 
-const timerInterval = setInterval(() => {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
+        if (distance < 0) {
+            clearInterval(timerInterval);
+            const timerText = document.getElementById("countdown-timer");
+            if (timerText) timerText.innerHTML = "REGISTRATIONS CLOSED";
+            return;
+        }
 
-    if (distance < 0) {
-        clearInterval(timerInterval);
-        document.getElementById("countdown-timer").innerHTML = "CLOSED";
-        return;
-    }
+        // Exact time component computations
+        const d = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+        const h = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        const m = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        const s = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
 
-    document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
-    document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-    document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-    document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
-}, 1000);
+        const daysEl = document.getElementById("days");
+        const hoursEl = document.getElementById("hours");
+        const minutesEl = document.getElementById("minutes");
+        const secondsEl = document.getElementById("seconds");
 
-// ==========================================
-// 5. TOURNAMENT DATA
-// ==========================================
-const upcomingTournaments = [
-    {
-        id: "T001",
-        name: "False9ine Monsoon Cup",
-        location: "Tiki Taka, T Nagar",
-        format: "5-a-side",
-        entry: "₹1,500",
-        time: "6:00 PM Reporting"
-    },
-    {
-        id: "T002",
-        name: "Midnight Knockouts",
-        location: "Game On, Anna Nagar",
-        format: "5-a-side + 3 Subs",
-        entry: "₹2,000",
-        time: "10:00 PM Reporting"
-    }
-];
+        if (daysEl) daysEl.innerText = d;
+        if (hoursEl) hoursEl.innerText = h;
+        if (minutesEl) minutesEl.innerText = m;
+        if (secondsEl) secondsEl.innerText = s;
+    }, 1000);
+}
 
+// --- 7. DYNAMIC ELEMENT INJECTION GENERATOR ---
 function renderTournaments() {
     const grid = document.getElementById('upcoming-grid');
-    if(upcomingTournaments.length === 0) {
-        grid.innerHTML = `<p style="color:#888;">No upcoming tournaments right now. Follow IG to stay updated.</p>`;
+    if (!grid) return;
+
+    if (upcomingTournaments.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-fixture">
+                <div class="empty-stamp">SEASON LOADING</div>
+                <h3>No fixtures live right now</h3>
+                <p>We're locking in the next turf, date, and format. Follow the page — early DMs usually grab the first slots when it drops.</p>
+                <a href="https://instagram.com/false9ine.duo" target="_blank" class="action-btn">Follow for Drop Alerts</a>
+            </div>`;
         return;
     }
 
     grid.innerHTML = upcomingTournaments.map(t => `
-        <div class="tourney-card">
-            <h3>${t.name}</h3>
-            <p>📍 ${t.location}</p>
-            <p>⚽ ${t.format} | ⏰ ${t.time}</p>
-            <div class="price">${t.entry} / Team</div>
-            <button class="action-btn" style="width: 100%; font-size: 1rem; padding: 0.8rem;" 
-                onclick="startRegistration('${t.name}', '${t.entry}')">Register Now</button>
+        <div class="tourney-card tilt-card">
+            <div class="ticket-main">
+                <div class="ticket-code">${t.id} // BOARDING NOW</div>
+                <h3 class="ticket-name">${t.name}</h3>
+                <p class="ticket-meta">📍 <strong>${t.location}</strong></p>
+                <p class="ticket-meta">⚽ ${t.format} &nbsp;|&nbsp; ⏰ ${t.time}</p>
+            </div>
+            <div class="ticket-tear"></div>
+            <div class="ticket-stub">
+                <div class="price">${t.entry}<small>PER TEAM</small></div>
+                <button class="action-btn" onclick="startRegistration('${t.name}', '${t.entry}')">Register</button>
+            </div>
         </div>
     `).join('');
     
-    const newHoverElements = document.querySelectorAll('.tourney-card, .action-btn');
-    newHoverElements.forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-    });
+    // Bind freshly generated interface nodes back to tracking engines
+    refreshCursorTargets();
 }
-renderTournaments();
 
-// ==========================================
-// 6. REGISTRATION WIZARD
-// ==========================================
+// --- 8. STEPPED USER REGISTRATION WIZARD FLOW ---
 function startRegistration(tName, tEntry) {
-    document.getElementById('reg-tournament-details').innerHTML = `<p style="color:#888; margin-bottom:1rem;">Registering for:<br><strong style="color:#fff;">${tName}</strong><br>Fee: ${tEntry}</p>`;
+    const detailsContainer = document.getElementById('reg-tournament-details');
+    if (detailsContainer) {
+        detailsContainer.innerHTML = `
+            <p style="color: var(--text-muted); line-height: 1.4;">Registering for:<br>
+            <strong style="color: #fff; font-size: 1.1rem;">${tName}</strong><br>
+            Entry Fee: <span style="color: var(--accent-green); font-weight: 700;">${tEntry}</span></p>
+        `;
+    }
     openModal('register-modal');
     nextRegStep(1);
 }
 
 function nextRegStep(stepNum) {
-    document.querySelectorAll('.reg-step').forEach(step => step.classList.add('hidden'));
-    
-    if(stepNum === 2) {
-        const tName = document.getElementById('teamName').value;
-        const cName = document.getElementById('captainName').value;
-        const phone = document.getElementById('captainPhone').value;
-        if(!tName || !cName || !phone) {
+    if (stepNum === 2) {
+        const tName = document.getElementById('teamName').value.trim();
+        const cName = document.getElementById('captainName').value.trim();
+        const phone = document.getElementById('captainPhone').value.trim();
+        
+        if (!tName || !cName || !phone) {
             alert("Please fill in all team details.");
-            document.getElementById('reg-step-1').classList.remove('hidden');
             return;
         }
     }
 
-    if(stepNum === 3) {
+    if (stepNum === 3) {
         const randomNum = Math.floor(1000 + Math.random() * 9000);
-        document.getElementById('generated-code').innerText = `F9T${randomNum}`;
+        const codeOutput = document.getElementById('generated-code');
+        if (codeOutput) {
+            codeOutput.innerText = `F9T-${randomNum}`;
+        }
+        setTimeout(() => launchConfetti(document.getElementById('reg-step-3')), 150);
     }
 
-    document.getElementById(`reg-step-${stepNum}`).classList.remove('hidden');
+    // Toggle DOM class structures to cycle panel visibility cleanly
+    document.querySelectorAll('.reg-step').forEach(step => {
+        step.classList.add('hidden');
+        step.classList.remove('active-step');
+    });
+    
+    const targetStep = document.getElementById(`reg-step-${stepNum}`);
+    if (targetStep) {
+        targetStep.classList.remove('hidden');
+        targetStep.classList.add('active-step');
+    }
+}
+// --- 9. SLIDING NAV INDICATOR ---
+function moveNavIndicator() {
+    const indicator = document.getElementById('nav-indicator');
+    const active = document.querySelector('.nav-item.active');
+    if (!indicator || !active) return;
+    indicator.style.width = `${active.offsetWidth}px`;
+    indicator.style.left = `${active.offsetLeft}px`;
+}
+
+// --- 10. MAGNETIC 3D CARD TILT (pointer devices only) ---
+const canTilt = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+function initTilt() {
+    if (!canTilt) return;
+    document.querySelectorAll('.tilt-card').forEach(card => {
+        card.removeEventListener('mousemove', handleTiltMove);
+        card.removeEventListener('mouseleave', handleTiltLeave);
+        card.addEventListener('mousemove', handleTiltMove);
+        card.addEventListener('mouseleave', handleTiltLeave);
+    });
+}
+
+function handleTiltMove(e) {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width;
+    const relY = (e.clientY - rect.top) / rect.height;
+    const rotateY = (relX - 0.5) * 10;   // left/right tilt
+    const rotateX = (0.5 - relY) * 10;   // up/down tilt
+    card.style.transform = `perspective(800px) translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+}
+
+function handleTiltLeave(e) {
+    e.currentTarget.style.transform = '';
+}
+
+// --- 11. BUTTON RIPPLE ---
+function initRipple() {
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.action-btn');
+        if (!btn) return;
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple-el';
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+        btn.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 650);
+    });
+}
+
+// --- 12. CONFETTI BURST ON SUCCESSFUL REGISTRATION ---
+function launchConfetti(container) {
+    if (!container) return;
+    const colors = ['#3ecf5b', '#ffc23c', '#f5f3ea'];
+    for (let i = 0; i < 26; i++) {
+        const piece = document.createElement('span');
+        piece.className = 'confetti-piece';
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = `${Math.random() * 0.25}s`;
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        container.appendChild(piece);
+        setTimeout(() => piece.remove(), 1700);
+    }
+}
+
+// --- 13. STATS STRIP (edit these numbers whenever you have real ones) ---
+const statsData = [
+    { value: 50, suffix: '+', label: 'Teams Hosted' },
+    { value: 12, suffix: '+', label: 'Tournaments Run' },
+    { value: 500, suffix: '+', label: 'Players in the Community' },
+    { value: 2, suffix: '', label: 'Turfs Across Chennai' }
+];
+
+function renderStats() {
+    const strip = document.getElementById('stats-strip');
+    if (!strip) return;
+    strip.innerHTML = statsData.map(s => `
+        <div class="stat-cell">
+            <div class="stat-value" data-target="${s.value}" data-suffix="${s.suffix}">0${s.suffix}</div>
+            <span class="stat-label">${s.label}</span>
+        </div>
+    `).join('');
+}
+
+function animateStats() {
+    document.querySelectorAll('.stat-value').forEach(el => {
+        const target = parseInt(el.dataset.target, 10) || 0;
+        const suffix = el.dataset.suffix || '';
+        const duration = 1100;
+        const start = performance.now();
+
+        function tick(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = `${Math.round(target * eased)}${suffix}`;
+            if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+    });
+}
+
+// --- 14. FAQ ACCORDION ---
+function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    if (!item) return;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+}
+
+// --- 15. PENALTY SHOOTOUT GAME ---
+const goalZoneCenters = { tl: [63, 52], tc: [150, 52], tr: [237, 52], bl: [63, 118], bc: [150, 118], br: [237, 118] };
+const keeperDivePositions = { l: [78, 85], c: [150, 85], r: [222, 85] };
+let shootBusy = false, shootIndex = 0, shootScore = 0;
+
+function columnOfZone(zone) {
+    if (zone.includes('l')) return 'l';
+    if (zone.includes('r')) return 'r';
+    return 'c';
+}
+
+function positionBall(x, y, opacity = 1) {
+    const ball = document.getElementById('goal-ball');
+    if (!ball) return;
+    ball.style.left = `${(x / 300) * 100}%`;
+    ball.style.top = `${(y / 170) * 100}%`;
+    ball.style.opacity = opacity;
+}
+
+function openGameModal() {
+    openModal('game-modal');
+    resetGame();
+}
+
+function resetGame() {
+    shootBusy = false; shootIndex = 0; shootScore = 0;
+    const shotCount = document.getElementById('shot-count');
+    const scoreCount = document.getElementById('score-count');
+    const resultBox = document.getElementById('game-result');
+    const sub = document.getElementById('game-sub');
+    const keeper = document.getElementById('keeper-icon');
+
+    if (shotCount) shotCount.textContent = 1;
+    if (scoreCount) scoreCount.textContent = 0;
+    if (resultBox) resultBox.classList.add('hidden');
+    if (sub) sub.textContent = 'Pick your corner. Beat the keeper.';
+    if (keeper) keeper.setAttribute('transform', 'translate(150,85)');
+    positionBall(150, 163, 1);
+    document.querySelectorAll('.goal-zone').forEach(z => z.disabled = false);
+}
+
+function shoot(zone) {
+    if (shootBusy || shootIndex >= 5) return;
+    shootBusy = true;
+    document.querySelectorAll('.goal-zone').forEach(z => z.disabled = true);
+
+    const cols = ['l', 'c', 'r'];
+    const keeperCol = cols[Math.floor(Math.random() * cols.length)];
+    const keeper = document.getElementById('keeper-icon');
+    const [kx, ky] = keeperDivePositions[keeperCol];
+    if (keeper) keeper.setAttribute('transform', `translate(${kx},${ky})`);
+
+    const [tx, ty] = goalZoneCenters[zone];
+    positionBall(tx, ty, 1);
+
+    const scored = columnOfZone(zone) !== keeperCol;
+    const sub = document.getElementById('game-sub');
+
+    setTimeout(() => {
+        shootIndex++;
+        if (scored) { shootScore++; if (sub) sub.textContent = 'GOAL! 🥅'; }
+        else if (sub) { sub.textContent = 'SAVED! 🧤'; }
+
+        const scoreCount = document.getElementById('score-count');
+        if (scoreCount) scoreCount.textContent = shootScore;
+
+        if (shootIndex >= 5) {
+            finishGame();
+        } else {
+            const shotCount = document.getElementById('shot-count');
+            if (shotCount) shotCount.textContent = shootIndex + 1;
+            setTimeout(() => {
+                if (keeper) keeper.setAttribute('transform', 'translate(150,85)');
+                positionBall(150, 163, 1);
+                shootBusy = false;
+                document.querySelectorAll('.goal-zone').forEach(z => z.disabled = false);
+            }, 650);
+        }
+    }, 400);
+}
+
+function finishGame() {
+    const resultBox = document.getElementById('game-result');
+    const title = document.getElementById('game-result-title');
+    const text = document.getElementById('game-result-text');
+    const sub = document.getElementById('game-sub');
+    if (!resultBox || !title || !text) return;
+
+    let heading, body;
+    if (shootScore === 5) {
+        heading = 'PERFECT — 5/5';
+        body = "Ice in your veins. Bring that composure to the turf.";
+        setTimeout(() => launchConfetti(document.querySelector('.game-box')), 100);
+    } else if (shootScore >= 3) {
+        heading = `SOLID — ${shootScore}/5`;
+        body = "Good enough to win a shootout. Register and prove it live.";
+    } else {
+        heading = `${shootScore}/5 — ROUGH SHIFT`;
+        body = "The keeper had your number. Redemption's one tap away.";
+    }
+    title.textContent = heading;
+    text.textContent = body;
+    resultBox.classList.remove('hidden');
+    if (sub) sub.textContent = 'Shootout complete';
 }
