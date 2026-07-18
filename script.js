@@ -20,14 +20,22 @@ document.addEventListener("DOMContentLoaded", () => {
     initTilt();
     initRipple();
     moveNavIndicator();
-    const home = document.getElementById('home');
-    if (home) staggerReveal(home);
-    setTimeout(animateStats, 250);
+    spawnParticles();
+    initPreloader();
+
+    setTimeout(() => {
+        const home = document.getElementById('home');
+        if (home) staggerReveal(home);
+        animateStats();
+    }, 950);
 });
 
 window.addEventListener('resize', moveNavIndicator);
 
 // --- 3. DYNAMIC SINGLE PAGE NAVIGATION (SPA) ---
+// Sub-pages that aren't in the nav bar themselves — keep the parent tab highlighted
+const navParentMap = { upcoming: 'tournaments' };
+
 function navigate(targetId) {
     // Top out scroll bar positions instantly for visual continuity
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -48,7 +56,8 @@ function navigate(targetId) {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => item.classList.remove('active'));
     
-    const activeLink = document.querySelector(`.nav-item[data-target="${targetId}"]`);
+    const navTargetId = navParentMap[targetId] || targetId;
+    const activeLink = document.querySelector(`.nav-item[data-target="${navTargetId}"]`);
     if (activeLink) {
         activeLink.classList.add('active');
     }
@@ -260,7 +269,8 @@ function nextRegStep(stepNum) {
 function moveNavIndicator() {
     const indicator = document.getElementById('nav-indicator');
     const active = document.querySelector('.nav-item.active');
-    if (!indicator || !active) return;
+    if (!indicator) return;
+    if (!active) { indicator.style.width = '0px'; return; }
     indicator.style.width = `${active.offsetWidth}px`;
     indicator.style.left = `${active.offsetLeft}px`;
 }
@@ -312,7 +322,7 @@ function initRipple() {
 // --- 12. CONFETTI BURST ON SUCCESSFUL REGISTRATION ---
 function launchConfetti(container) {
     if (!container) return;
-    const colors = ['#3ecf5b', '#ffc23c', '#f5f3ea'];
+    const colors = ['#3ecf5b', '#4fd8ff', '#f5f3ea'];
     for (let i = 0; i < 26; i++) {
         const piece = document.createElement('span');
         piece.className = 'confetti-piece';
@@ -330,7 +340,7 @@ const statsData = [
     { value: 50, suffix: '+', label: 'Teams Hosted' },
     { value: 12, suffix: '+', label: 'Tournaments Run' },
     { value: 500, suffix: '+', label: 'Players in the Community' },
-    { value: 2, suffix: '', label: 'Turfs Across Chennai' }
+    { value: 4, suffix: '', label: 'Match Formats' }
 ];
 
 function renderStats() {
@@ -430,8 +440,8 @@ function shoot(zone) {
 
     setTimeout(() => {
         shootIndex++;
-        if (scored) { shootScore++; if (sub) sub.textContent = 'GOAL! 🥅'; }
-        else if (sub) { sub.textContent = 'SAVED! 🧤'; }
+        if (scored) { shootScore++; if (sub) sub.textContent = 'GOAL! 🥅'; playGoalSound(); }
+        else { if (sub) sub.textContent = 'SAVED! 🧤'; playSaveSound(); }
 
         const scoreCount = document.getElementById('score-count');
         if (scoreCount) scoreCount.textContent = shootScore;
@@ -474,4 +484,71 @@ function finishGame() {
     text.textContent = body;
     resultBox.classList.remove('hidden');
     if (sub) sub.textContent = 'Shootout complete';
+}
+
+// --- 16. OPENING ANIMATION ---
+function initPreloader() {
+    const preloader = document.getElementById('preloader');
+    const fill = document.getElementById('preloader-fill');
+    if (!preloader) return;
+    requestAnimationFrame(() => { if (fill) fill.style.width = '100%'; });
+    setTimeout(() => {
+        preloader.classList.add('preloader-hide');
+        setTimeout(() => preloader.remove(), 650);
+    }, 1050);
+}
+
+// --- 17. AMBIENT DRIFTING BACKGROUND PARTICLES ---
+function spawnParticles() {
+    const container = document.getElementById('bg-particles');
+    if (!container) return;
+    const count = window.innerWidth < 640 ? 8 : 16;
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        p.className = 'bg-particle';
+        const size = 3 + Math.random() * 5;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${Math.random() * 100}%`;
+        p.style.setProperty('--drift', `${Math.random() * 80 - 40}px`);
+        p.style.animationDuration = `${14 + Math.random() * 12}s`;
+        p.style.animationDelay = `${Math.random() * -20}s`;
+        container.appendChild(p);
+    }
+}
+
+// --- 18. LIGHTWEIGHT SFX (no audio files — generated tones) ---
+let audioCtx;
+function playTone(freq, duration, type, gainStart) {
+    try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(gainStart, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    } catch (e) { /* Web Audio unsupported — fail silently */ }
+}
+function playGoalSound() {
+    playTone(660, 0.12, 'triangle', 0.16);
+    setTimeout(() => playTone(880, 0.18, 'triangle', 0.13), 90);
+}
+function playSaveSound() {
+    playTone(160, 0.22, 'sawtooth', 0.1);
+}
+
+// --- 19. SHARE SHOOTOUT SCORE ---
+function shareScore() {
+    const text = `I scored ${shootScore}/5 in the False9ine Penalty Shootout ⚽ Think you can beat me?`;
+    if (navigator.share) {
+        navigator.share({ text }).catch(() => {});
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+        const sub = document.getElementById('game-sub');
+        if (sub) sub.textContent = 'Copied to clipboard!';
+    }
 }

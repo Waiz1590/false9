@@ -11,6 +11,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- OPENING ANIMATION -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-badge">FALSE<span>9</span>INE</div>
+        <div class="preloader-track"><div class="preloader-fill" id="preloader-fill"></div></div>
+        <span class="preloader-tag">LOADING THE PITCH</span>
+    </div>
+
     <!-- INTERACTIVE CURSOR MOTIONS -->
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-outline" id="cursor-outline"></div>
@@ -18,6 +25,7 @@
     <!-- KINETIC BG GLOW LAYER -->
     <div class="bg-glow glow-1"></div>
     <div class="bg-glow glow-2"></div>
+    <div class="bg-particles" id="bg-particles"></div>
 
     <!-- MAIN IMMERSIVE NAVIGATION CONTAINER -->
     <nav class="navbar">
@@ -140,6 +148,10 @@
         <!-- SECTION: UPCOMING FIXTURES -->
         <section id="upcoming" class="view-section">
             <div class="content-wrapper">
+                <button class="back-link" onclick="navigate('tournaments')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Hubs
+                </button>
                 <h2 class="section-title">UPCOMING FIXTURES</h2>
                 <div id="upcoming-grid" class="tournament-grid">
                     <!-- Cards injection point via JavaScript -->
@@ -425,7 +437,10 @@
             <div id="game-result" class="game-result hidden">
                 <h3 id="game-result-title"></h3>
                 <p id="game-result-text"></p>
-                <button class="action-btn" onclick="resetGame()">Retake Shootout</button>
+                <div class="game-result-actions">
+                    <button class="action-btn" onclick="resetGame()">Retake Shootout</button>
+                    <button class="action-btn ghost-btn" onclick="shareScore()">Share Score</button>
+                </div>
             </div>
         </div>
     </div>
